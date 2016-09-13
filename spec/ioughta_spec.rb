@@ -94,15 +94,33 @@ describe Ioughta do
     end
   end
 
-  describe 'it aliases the methods' do
+  describe 'alternative calling styles' do
     before do
       module Foo
         include Ioughta
+
+        ioughta_const ->(i) { 1 << (10 * i) }, %i[_ KB MB GB]
+
+        BYTES = ioughta_hash %i[_ KB MB GB] do |iota|
+          1 << (10 * iota)
+        end
       end
     end
 
     after do
       Object.send(:remove_const, :Foo)
+    end
+
+    it 'accepts a lambda as the first argument' do
+      expect(Foo::KB).to eq(2 ** 10)
+      expect(Foo::MB).to eq(2 ** 20)
+      expect(Foo::GB).to eq(2 ** 30)
+    end
+
+    it 'accepts a block instead of a lambda' do
+      expect(Foo::BYTES[:KB]).to eq(2 ** 10)
+      expect(Foo::BYTES[:MB]).to eq(2 ** 20)
+      expect(Foo::BYTES[:GB]).to eq(2 ** 30)
     end
   end
 end

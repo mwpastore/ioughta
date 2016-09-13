@@ -114,6 +114,18 @@ Object.ioughta_const(
 )
 ```
 
+You can also pass the lambda as the first argument:
+
+```ruby
+Object.ioughta_const ->(i) { 1 << (10 * i) }, %i[_ KB MB GB TB PB EB ZB YB]
+```
+
+Or even a block, instead of a lambda:
+
+```ruby
+BYTES = Object.ioughta_hash(%i[_ KB MB GB TB PB EB ZB YB]) { |i| 1 << (10 * i) }
+```
+
 The only major feature missing from the Go implementation is the ability to
 perform parallel assignment in the constant list. We're defining a list of
 terms, not a list of expressions, so it's not possible to do in Ruby without

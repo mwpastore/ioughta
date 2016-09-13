@@ -4,14 +4,16 @@ require 'ioughta/version'
 module Ioughta
   def self.included(base)
     class << base
-      def ioughta_const(*data)
-        each_resolved_pair(pair(data)) { |nom, val| const_set(nom, val) }
+      def ioughta_const(*data, &block)
+        each_resolved_pair(pair(data, &block)) do |nom, val|
+          const_set(nom, val)
+        end
       end
 
       alias_method :iota_const, :ioughta_const
 
-      def ioughta_hash(*data)
-        each_resolved_pair(pair(data)).to_h
+      def ioughta_hash(*data, &block)
+        each_resolved_pair(pair(data, &block)).to_h
       end
 
       alias_method :iota_hash, :ioughta_hash
@@ -25,8 +27,17 @@ module Ioughta
         (0..Float::INFINITY).lazy
       end
 
-      def pair(data)
-        data, lam = data.dup, DEFAULT_LAMBDA
+      def pair(data, &block)
+        data = data.flatten
+        lam =
+          if block
+            block
+          elsif data.first.respond_to?(:call)
+            data.shift
+          else
+            DEFAULT_LAMBDA
+          end
+
         lazy_iota.each do |i|
           if i % 2 != 0
             if data[i].respond_to?(:call)
