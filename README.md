@@ -120,7 +120,7 @@ You can also pass the lambda as the first argument:
 Object.ioughta_const ->(i) { 1 << (10 * i) }, %i[_ KB MB GB TB PB EB ZB YB]
 ```
 
-Or even a block, instead of a lambda:
+Or even pass a block, instead of a lambda:
 
 ```ruby
 BYTES = Object.ioughta_hash(%i[_ KB MB GB TB PB EB ZB YB]) { |i| 1 << (10 * i) }
@@ -148,14 +148,16 @@ require 'ioughta'
 module MyFileUtils
   include Ioughta
 
-  iota_const :EXECUTE, ->(b) { 0b1 << b }, :WRITE, :READ
-  iota_const :TACKY, ->(b) { 0b1 << b }, :SETGID, :SETUID
+  iota_const ->(b) { 1 << b }, %i[EXECUTE WRITE READ]
+  iota_const ->(b) { 1 << b }, %i[TACKY SETGID SETUID]
 
-  SHIFT = iota_hash(:other, ->(d) { d * 3 }, :group, :user, :special).freeze
-  MASK = iota_hash(:other, ->(_o, key) { 07 << SHIFT[key] }, :group, :user, :special).freeze
+  OFFSET = iota_hash ->(d) { d * 3 }, %i[other group user special]
+  MASK = iota_hash %i[other group user special] do |_, key|
+    7 << OFFSET[key]
+  end
 
   def self.mask_and_shift(mode, field)
-    (mode & MASK[field]) >> SHIFT[field]
+    (mode & MASK[field]) >> OFFSET[field]
   end
 end
 
@@ -163,8 +165,8 @@ MyFileUtils.mask_and_shift(0644, :user) & MyFileUtils::EXECUTE # => 0
 MyFileUtils.mask_and_shift(01777, :special) & MyFileUtils::TACKY # => 1
 ```
 
-One note on the above: the lambda can take the key at the current iteration as
-an optional second argument.
+One note on the above: the lambda (or block) can take the key at the current
+iteration as an optional second argument.
 
 ## Development
 
