@@ -38,16 +38,10 @@ Object.ioughta_const(
 IG_STRAWBERRIES # => 8
 ```
 
-Or, perhaps a little more Rubyishly:
+Or, perhaps a bit more Rubyishly:
 
 ```ruby
-IG = Object.ioughta_hash(
-  :eggs, ->(i) { 1 << i },
-  :chocolate,
-  :nuts,
-  :strawberries,
-  :shellfish
-).freeze
+IG = Object.ioughta_hash ->(i) { 1 << i }, %i[eggs chocolate nuts strawberries shellfish]
 
 IG[:strawberries] # => 8
 ```
@@ -152,9 +146,7 @@ module MyFileUtils
   iota_const ->(b) { 1 << b }, %i[TACKY SETGID SETUID]
 
   OFFSET = iota_hash ->(d) { d * 3 }, %i[other group user special]
-  MASK = iota_hash %i[other group user special] do |_, key|
-    7 << OFFSET[key]
-  end
+  MASK = iota_hash(OFFSET.keys) { |_, key| 7 << OFFSET[key] }
 
   def self.mask_and_shift(mode, field)
     (mode & MASK[field]) >> OFFSET[field]

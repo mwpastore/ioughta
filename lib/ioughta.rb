@@ -53,7 +53,7 @@ module Ioughta
       end
 
       def each_resolved_pair(data)
-        return enum_for(:each_resolved_pair, data) unless block_given?
+        return enum_for(__method__, data) { data.length / 2 } unless block_given?
 
         data.each_slice(2).with_object(lazy_iota) do |(nom, lam), iota|
           val = lam.arity == 2 ? lam.call(iota.next, nom) : lam.call(iota.next)
