@@ -1,5 +1,8 @@
 # Io(ugh)ta
 
+[![Build Status](https://travis-ci.org/mwpastore/ioughta.svg?branch=master)](https://travis-ci.org/mwpastore/ioughta)
+[![Gem Version](https://badge.fury.io/rb/ioughta.svg)](https://badge.fury.io/rb/ioughta)
+
 Helpers for defining Go-like constants and hashes in Ruby using iota.
 
 Go has quite a nice facility for defining constants derived from a sequential
@@ -13,11 +16,11 @@ Here's an example, written in Go:
 type Allergen int
 
 const (
-    IgEggs Allergen = 1 << iota         // 1 << 0 which is 00000001
-    IgChocolate                         // 1 << 1 which is 00000010
-    IgNuts                              // 1 << 2 which is 00000100
-    IgStrawberries                      // 1 << 3 which is 00001000
-    IgShellfish                         // 1 << 4 which is 00010000
+    IgEggs Allergen = 1 << iota   // 1 << 0 which is 00000001
+    IgChocolate                   // 1 << 1 which is 00000010
+    IgNuts                        // 1 << 2 which is 00000100
+    IgStrawberries                // 1 << 3 which is 00001000
+    IgShellfish                   // 1 << 4 which is 00010000
 )
 ```
 
@@ -38,7 +41,7 @@ IG_STRAWBERRIES # => 8
 Or, perhaps a little more Rubyishly:
 
 ```ruby
-ALLERGENS = Object.ioughta_hash(
+IG = Object.ioughta_hash(
   :eggs, ->(i) { 1 << i },
   :chocolate,
   :nuts,
@@ -46,7 +49,7 @@ ALLERGENS = Object.ioughta_hash(
   :shellfish
 ).freeze
 
-ALLERGENS[:strawberries] # => 8
+IG[:strawberries] # => 8
 ```
 
 ## Installation
@@ -59,11 +62,15 @@ gem 'ioughta'
 
 And then execute:
 
-    $ bundle
+```sh
+$ bundle
+```
 
 Or install it yourself as:
 
-    $ gem install ioughta
+```sh
+$ gem install ioughta
+```
 
 ## Usage
 
@@ -75,7 +82,6 @@ create a sequence of constants with consecutive integer values:
 
 ```ruby
 require 'ioughta'
-
 include Ioughta
 
 Object.ioughta_const(:FOO, :BAR, :QUX)
