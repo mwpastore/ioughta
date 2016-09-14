@@ -52,7 +52,7 @@ module Ioughta
         return enum_for(__method__, data) { data.length / 2 } unless block_given?
 
         data.each_slice(2).with_index do |(nom, lam), iota|
-          val = lam.arity == 2 ? lam.call(iota, nom) : lam.call(iota)
+          val = lam.call(* [iota, nom].take(lam.arity.abs))
           next if nom == SKIP_SYMBOL
           yield nom, val
         end
