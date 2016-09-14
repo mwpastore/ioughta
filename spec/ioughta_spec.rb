@@ -75,7 +75,8 @@ describe Ioughta do
           :A, :_,
           :B, ->(i) { i ** 2 }, :C, :_,
           :D, ->(j) { j ** 3 }, :E, :F, :_,
-          :G, proc(&:itself)
+          :G, -> { 0.1 }, :H, :_,
+          :I, proc(&:itself)
       end
     end
 
@@ -90,7 +91,9 @@ describe Ioughta do
       expect(Foo::D).to eq(5 ** 3)
       expect(Foo::E).to eq(6 ** 3)
       expect(Foo::F).to eq(7 ** 3)
-      expect(Foo::G).to eq(9)
+      expect(Foo::G).to eq(0.1)
+      expect(Foo::H).to eq(0.1)
+      expect(Foo::I).to eq(12)
     end
   end
 
