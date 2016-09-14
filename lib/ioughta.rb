@@ -23,10 +23,6 @@ module Ioughta
       DEFAULT_LAMBDA = proc(&:itself)
       SKIP_SYMBOL = :_
 
-      def lazy_iota
-        (0..Float::INFINITY).lazy
-      end
-
       def pair(data, &block)
         data = data.flatten
         lam =
@@ -38,7 +34,7 @@ module Ioughta
             DEFAULT_LAMBDA
           end
 
-        lazy_iota.each do |i|
+        (0..Float::INFINITY).lazy.each do |i|
           if i % 2 != 0
             if data[i].respond_to?(:call)
               lam = data[i]
@@ -55,8 +51,8 @@ module Ioughta
       def each_resolved_pair(data)
         return enum_for(__method__, data) { data.length / 2 } unless block_given?
 
-        data.each_slice(2).with_object(lazy_iota) do |(nom, lam), iota|
-          val = lam.arity == 2 ? lam.call(iota.next, nom) : lam.call(iota.next)
+        data.each_slice(2).with_index do |(nom, lam), iota|
+          val = lam.arity == 2 ? lam.call(iota, nom) : lam.call(iota)
           next if nom == SKIP_SYMBOL
           yield nom, val
         end
