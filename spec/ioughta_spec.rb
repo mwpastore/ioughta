@@ -75,7 +75,7 @@ describe Ioughta do
           :A, :_,
           :B, ->(i) { i ** 2 }, :C, :_,
           :D, ->(j) { j ** 3 }, :E, :F, :_,
-          :G, -> { 0.1 }, :H, :_,
+          :G, ->{ 0.1 }, :H, :_,
           :I, proc(&:itself)
       end
     end
