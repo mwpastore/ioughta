@@ -101,9 +101,7 @@ describe Ioughta do
 
         ioughta_const ->(i) { 1 << (10 * i) }, %i[_ KB MB GB]
 
-        BYTES = ioughta_hash %i[_ KB MB GB] do |iota|
-          1 << (10 * iota)
-        end
+        BYTES = ioughta_hash(%i[_ KB MB GB]) { |iota| 1 << (10 * iota) }.freeze
       end
     end
 

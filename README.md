@@ -41,7 +41,13 @@ IG_STRAWBERRIES # => 8
 Or, perhaps a bit more Rubyishly:
 
 ```ruby
-IG = Object.ioughta_hash ->(i) { 1 << i }, %i[eggs chocolate nuts strawberries shellfish]
+IG = Object.ioughta_hash(->(i) { 1 << i }, %i[
+  eggs
+  chocolate
+  nuts
+  strawberries
+  shellfish
+]).freeze
 
 IG[:strawberries] # => 8
 ```
@@ -117,7 +123,7 @@ Object.ioughta_const ->(i) { 1 << (10 * i) }, %i[_ KB MB GB TB PB EB ZB YB]
 Or even pass a block, instead of a lambda:
 
 ```ruby
-BYTES = Object.ioughta_hash(%i[_ KB MB GB TB PB EB ZB YB]) { |i| 1 << (10 * i) }
+BYTES = Object.ioughta_hash(%i[_ KB MB GB TB PB EB ZB YB]) { |i| 1 << (10 * i) }.freeze
 ```
 
 The only major feature missing from the Go implementation is the ability to
@@ -145,8 +151,8 @@ module MyFileUtils
   iota_const ->(b) { 1 << b }, %i[EXECUTE WRITE READ]
   iota_const ->(b) { 1 << b }, %i[TACKY SETGID SETUID]
 
-  OFFSET = iota_hash ->(d) { d * 3 }, %i[other group user special]
-  MASK = iota_hash(OFFSET.keys) { |_, key| 7 << OFFSET[key] }
+  OFFSET = iota_hash(->(d) { d * 3 }, %i[other group user special]).freeze
+  MASK = iota_hash(OFFSET.keys) { |_, key| 7 << OFFSET[key] }.freeze
 
   def self.mask_and_shift(mode, field)
     (mode & MASK[field]) >> OFFSET[field]
