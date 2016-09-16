@@ -27,13 +27,15 @@ module Ioughta
         data = data.flatten(1)
         lam = (data.shift if data[0].respond_to?(:call)) || block || DEFAULT_LAMBDA
 
-        data.map.with_index do |c, i, j = i.succ|
-          [c, data[j].respond_to?(:call) ? lam = data.slice!(j) : lam]
+        data.map.with_index do |nom, i, j = i.succ|
+          [nom, data[j].respond_to?(:call) ? lam = data.slice!(j) : lam]
         end
       end
 
       def each_resolved_pair(data)
-        return enum_for(__method__, data) { data.length / 2 } unless block_given?
+        return enum_for(__method__, data) do
+          data.count { |nom, | nom != SKIP_SYMBOL }
+        end unless block_given?
 
         data.each_with_index do |(nom, lam), iota|
           val = lam[*[iota, nom].take(lam.arity.abs)]

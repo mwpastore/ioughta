@@ -135,10 +135,10 @@ commas!
 You've probably noticed that in order to use Ioughta in the top-level
 namespace, we need to explicitly specify the `Object` receiver (just like we
 need to do for `#const_set`). I didn't want to get too crazy with the
-monkeypatching and/or dynamic dispatch. No such limitation exists when
-including Ioughta in a module or class, thanks to the available context. Also,
-if the `ioughta_const` and `ioughta_hash` methods are too ugly for you (I don't
-blame you), they're aliased as `iota_const` and `iota_hash`, respectively.
+monkeypatching and/or delegation. No such limitation exists when including
+Ioughta in a module or class, thanks to the available context. Also, if the
+`ioughta_const` and `ioughta_hash` methods are too ugly for you (I don't blame
+you), they're aliased as `iota_const` and `iota_hash`, respectively.
 
 Here is a very contrived and arbitrary example:
 
