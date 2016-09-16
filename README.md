@@ -49,7 +49,7 @@ IG = Object.ioughta_hash(->(i) { 1 << i }, %i[
   shellfish
 ]).freeze
 
-IG[:strawberries] # => 8
+IG[:shellfish] # => 16
 ```
 
 ## Installation
@@ -86,6 +86,8 @@ include Ioughta
 
 Object.ioughta_const(:FOO, :BAR, :QUX)
 
+FOO # => 0
+BAR # => 1
 QUX # => 2
 ```
 
@@ -94,6 +96,8 @@ To skip value(s) in the sequence, use the `:_` symbol:
 ```ruby
 Object.ioughta_const(:_, :FOO, :BAR, :_, :QUX)
 
+FOO # => 1
+BAR # => 2
 QUX # => 4
 ```
 
@@ -123,7 +127,7 @@ Object.ioughta_const ->(i) { 1 << (10 * i) }, %i[_ KB MB GB TB PB EB ZB YB]
 Or even pass a block, instead of a lambda:
 
 ```ruby
-BYTES = Object.ioughta_hash(%i[_ KB MB GB TB PB EB ZB YB]) { |i| 1 << (10 * i) }.freeze
+BYTES = Object.ioughta_hash(%i[_ KB MB GB TB PB EB ZB YB]) { |i| 10 ** (i * 3) }.freeze
 ```
 
 The only major feature missing from the Go implementation is the ability to
