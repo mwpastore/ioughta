@@ -24,35 +24,19 @@ module Ioughta
       SKIP_SYMBOL = :_
 
       def pair(data, &block)
-        data = data.flatten
-        lam =
-          if block
-            block
-          elsif data.first.respond_to?(:call)
-            data.shift
-          else
-            DEFAULT_LAMBDA
-          end
+        data = data.flatten(1)
+        lam = (data.shift if data[0].respond_to?(:call)) || block || DEFAULT_LAMBDA
 
-        (0..Float::INFINITY).lazy.each do |i|
-          if i % 2 != 0
-            if data[i].respond_to?(:call)
-              lam = data[i]
-            else
-              data.insert(i, lam)
-            end
-          elsif data[i].nil?
-            break
-          end
+        data.map.with_index do |c, i, j = i.succ|
+          [c, data[j].respond_to?(:call) ? lam = data.slice!(j) : lam]
         end
-        data
       end
 
       def each_resolved_pair(data)
         return enum_for(__method__, data) { data.length / 2 } unless block_given?
 
-        data.each_slice(2).with_index do |(nom, lam), iota|
-          val = lam.call(*[iota, nom].take(lam.arity.abs))
+        data.each_with_index do |(nom, lam), iota|
+          val = lam[*[iota, nom].take(lam.arity.abs)]
           next if nom == SKIP_SYMBOL
           yield nom, val
         end

@@ -124,4 +124,28 @@ describe Ioughta do
       expect(Foo::BYTES[:GB]).to eq(2 ** 30)
     end
   end
+
+  describe 'esoteric keys' do
+    before do
+      module Foo
+        include Ioughta
+
+        FOO = ioughta_hash([
+          [:a, :b],
+          {:c=>1, :d=>2},
+          nil
+        ]).freeze
+      end
+    end
+
+    after do
+      Object.send(:remove_const, :Foo)
+    end
+
+    it "accepts weird key classes" do
+      expect(Foo::FOO.keys[0]).to be_a(Array)
+      expect(Foo::FOO.keys[1]).to be_a(Hash)
+      expect(Foo::FOO.keys[2]).to be_a(NilClass)
+    end
+  end
 end
