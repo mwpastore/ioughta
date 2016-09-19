@@ -5,7 +5,7 @@ module Ioughta
   def self.included(base)
     class << base
       def ioughta_const(*data, &block)
-        each_resolved_pair(data, block) do |nom, val|
+        each_resolved_ipair(data, block) do |nom, val|
           const_set(nom, val)
         end
       end
@@ -13,7 +13,7 @@ module Ioughta
       alias_method :iota_const, :ioughta_const
 
       def ioughta_hash(*data, &block)
-        each_resolved_pair(data, block).to_h
+        each_resolved_ipair(data, block).to_h
       end
 
       alias_method :iota_hash, :ioughta_hash
@@ -23,9 +23,7 @@ module Ioughta
       DEFAULT_LAMBDA = proc(&:itself)
       SKIP_SYMBOL = :_
 
-      def each_pair_with_index(data, block = nil)
-        return enum_for(__method__, data, block) unless block_given?
-
+      def each_ipair_with_index(data, block = nil)
         data = data.to_a.flatten(1)
         lam = (data.shift if data[0].respond_to?(:call)) || block || DEFAULT_LAMBDA
 
@@ -34,11 +32,11 @@ module Ioughta
         end
       end
 
-      def each_resolved_pair(*args)
+      def each_resolved_ipair(*args)
         return enum_for(__method__, *args) unless block_given?
 
-        each_pair_with_index(*args) do |nom, lam, iota|
-          yield nom, lam[*[iota, nom].take(lam.arity.abs)] unless nom == SKIP_SYMBOL
+        each_ipair_with_index(*args) do |nom, lam, iota|
+          yield nom, lam.call(*[iota, nom].take(lam.arity.abs)) unless nom == SKIP_SYMBOL
         end
       end
     end

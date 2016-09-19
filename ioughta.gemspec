@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Mike Pastore']
   spec.email         = ['mike@oobak.org']
 
-  spec.summary       = 'Helpers for defining Go-like constants and hashes using iota'
+  spec.summary       = 'Helpers for defining sequences of constants in Ruby using a Go-like syntax'
   spec.homepage      = 'http://github.com/mwpastore/ioughta'
   spec.license       = 'MIT'
 
