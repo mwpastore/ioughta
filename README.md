@@ -131,13 +131,13 @@ Object.ioughta_const(
 You can also pass the lambda as the first argument:
 
 ```ruby
-Object.Ioughta_const ->(I) { 1 << (10 * I) }, %I[_ KIB MIB GIB TIB PIB EIB ZIB YIB]
+Object.ioughta_const ->(i) { 1 << (10 * i) }, %i[_ KiB MiB GiB TiB PiB EiB ZiB YiB]
 ```
 
-Or even pass a block, instead of a lambda:
+Or even pass a block, instead of a lambda (it's the Ruby way!):
 
 ```ruby
-BYTES = Object.ioughta_hash(%i[_ KB MB GB TB PB EB ZB YB]) { |i| 10 ** (i * 3) }.freeze
+UNITS = Object.ioughta_hash(%i[_ KB MB GB TB PB EB ZB YB]) { |i| 10 ** (i * 3) }.freeze
 ```
 
 If the first argument is a lambda *and* a block is given, the block will be
